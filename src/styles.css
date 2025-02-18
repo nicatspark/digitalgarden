@@ -1,0 +1,130 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-seed: light-dark(#ff4500, #d4592b);
+  --color-canvas: light-dark(#ffebe4, #321f19);
+  --color-card: light-dark(#fff4ef, #36231d);
+  --color-accentNonContentBaseline: light-dark(#ff4f0e, #bd4f26);
+  --color-accentContentBaseline: light-dark(#d33900, #da6e46);
+  --color-accentNonContentStrong: light-dark(#bf3b0b, #d08366);
+  --color-accentNonContentSubdued: light-dark(
+    rgba(191, 59, 11, 0.684),
+    rgba(208, 131, 102, 0.657)
+  );
+  --color-accentNonContentSoft: light-dark(
+    rgba(191, 59, 11, 0.072),
+    rgba(208, 131, 102, 0.068)
+  );
+  --color-accentContentStrong: light-dark(#972900, #e9a78f);
+  --color-accentContentSubdued: light-dark(
+    rgba(151, 41, 0, 0.764),
+    rgba(233, 167, 143, 0.715)
+  );
+  --color-neutralContentStrong: light-dark(#321f19, #e6dcd8);
+  --color-neutralContentSubdued: light-dark(
+    rgba(50, 31, 25, 0.629),
+    rgba(230, 220, 216, 0.561)
+  );
+  --color-neutralNonContentStrong: light-dark(#3e2c27, #beb6b2);
+  --color-neutralNonContentSubdued: light-dark(
+    rgba(62, 44, 39, 0.521),
+    rgba(190, 182, 178, 0.507)
+  );
+  --color-neutralNonContentSoft: light-dark(
+    rgba(62, 44, 39, 0.058),
+    rgba(190, 182, 178, 0.053)
+  );
+
+  --ui-switch-background-active: var(--color-accentNonContentStrong);
+  --ui-switch-background-inactive: var(--color-neutralNonContentSubdued);
+  --ui-switch-knob: var(--color-card);
+  --ui-switch-label: var(--color-accentNonContentSubdued);
+}
+
+:root {
+  --front-color: white;
+  --bg-color: light-dark(#eee, #212121);
+  --company-blue: light-dark(hsl(218deg 87% 45%), hsl(218deg 87% 45%));
+  --faded-fcolor: light-dark(
+    color-mix(in srgb, var(--front-color), black 40%),
+    color-mix(in srgb, var(--front-color), transparent 40%)
+  );
+  color-scheme: light dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100vh;
+  color: var(--color-neutralContentStrong);
+  scroll-behavior: smooth;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  transition: background-color 1s;
+  font-family: system-ui;
+  /*'''*/
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background-size: 10px 10px;
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--bg-color),
+    var(--bg-color) 5px,
+    hsl(from var(--bg-color) h s calc(l + 2)) 5px,
+    hsl(from var(--bg-color) h s calc(l + 2))
+  );
+}
+
+header {
+  /* background-color: var(--company-blue); */
+  color: var(--front-color);
+  height: 80px;
+  position: fixed;
+  inset: 0 0 auto 0;
+  top: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  /* backdrop-filter: blur(3px); */
+  color: white;
+
+  ui-digital-garden {
+    width: 300px;
+    view-transition-name: logo;
+  }
+}
+
+.silkscreen-regular {
+  font-family: "Silkscreen", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.silkscreen-bold {
+  font-family: "Silkscreen", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+section {
+  min-height: 100vh;
+  position: static;
+}
