@@ -1,73 +1,19 @@
-import { LitElement, html, css } from "lit";
+import { html, css } from "lit";
+import { BaseClass } from "./baseComponent.js";
 
-class BaseClass extends LitElement {
-  /**
-   * https://developer.mozilla.org/en-US/docs/Web/API/Document/adoptedStyleSheets
-   */
-  _setSlotStyles(slottedStyles) {
-    if (!slottedStyles) return;
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(slottedStyles);
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
-  }
-
-  _initiateSlotChangeObserver(callback) {
-    callback ??= () => console.log("slot updated");
-    const slot = this.shadowRoot.querySelector("slot");
-    slot.addEventListener("slotchange", callback);
-  }
-
-  get slottedChildren() {
-    const slot = this.shadowRoot.querySelector("slot");
-    return [...slot.assignedElements({ flatten: false })];
-  }
-
-  get slottedText() {
-    const slot = this.shadowRoot.querySelector("slot");
-    return [...slot.assignedNodes({ flatten: false })].map((x) => x.nodeValue);
-  }
-
-  emit(name, options) {
-    const event = new CustomEvent(name, {
-      bubbles: true,
-      cancelable: false,
-      composed: true,
-      detail: {},
-      ...options,
-    });
-
-    this.dispatchEvent(event);
-
-    return event;
-  }
-
-  supportsDeclarativeShadowDOM() {
-    return HTMLTemplateElement.prototype.hasOwnProperty("shadowRootMode");
-  }
-
-  /**
-   * check for a Declarative Shadow Root
-   */
-  hasShadowRoot() {
-    const internals = this.attachInternals();
-    return internals.shadowRoot;
-  }
-}
-
-// --------------------------
-
-class UiDigitalGarden extends BaseClass {
+export class UiDigitalGarden extends BaseClass {
   #observer;
-  #theme;
   #typedOut = false;
+  typestate;
 
   static properties = {
     offset: { type: Number },
     noGlow: { type: Boolean, attribute: "no-glow", reflect: true },
     noGlitch: { type: Boolean, attribute: "no-glitch", reflect: true },
     noTyping: { type: Boolean, attribute: "no-typing", reflect: true },
-    noDelay: { type: Boolean, attribute: "no-delay", reflect: true },
+    delay: { type: Number },
     theme: { type: String },
+    typedIn: { type: Boolean, attribute: "typed-in", reflect: true },
   };
 
   static styles = css`
@@ -549,14 +495,25 @@ class UiDigitalGarden extends BaseClass {
   constructor() {
     super();
     this.theme = "light";
+    this.delay = 0;
+    this.addEventListener("typeback", () =>
+      this._typeLetters({ reverse: true }).then(() => {
+        this.emit("typed-back");
+      }),
+    );
+    this.addEventListener("typeforward", () =>
+      this._typeLetters({ reverse: false }).then(() => {
+        this.emit("typed-forward");
+      }),
+    );
   }
 
   firstUpdated() {
     if (this.offset) this.style.setProperty("--offset", this.offset + "px");
     this._startThemeObserver();
     if (parseInt(getComputedStyle(this).width) <= 350) this.noGlow = true;
-    if (!this.noTyping)
-      this._typeLetters({ startDelay: this.noDelay ? 0 : 2000 });
+    if (!this.noTyping) this._typeLetters({ startDelay: this.delay });
+    if (this.typedIn) this._startRetracted();
   }
 
   disconnectedCallback() {
@@ -564,13 +521,19 @@ class UiDigitalGarden extends BaseClass {
     this.#observer.disconnect();
   }
 
+  _startRetracted() {
+    const svg = this.shadowRoot.querySelector("svg");
+    svg.classList.add("letter_0");
+    this.typestate = "typed-in";
+  }
+
   _typeLetters = async ({ startDelay = 0 } = {}) => {
+    this.typestate = "typing";
     const { promise, resolve } = Promise.withResolvers();
     const reverse = this.#typedOut ? true : false;
     this.#typedOut = !this.#typedOut;
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const letters = this.shadowRoot.querySelectorAll(".letter");
-    console.log("letters.length", letters.length);
     const svg = this.shadowRoot.querySelector("svg");
     for (let i = 0; i <= letters.length + 1; i++) {
       const y = reverse ? letters.length - i : i;
@@ -585,7 +548,7 @@ class UiDigitalGarden extends BaseClass {
         i * 100 + Math.random() * 100,
       );
     }
-    if (this.#typedOut)
+    if (this.#typedOut) {
       setTimeout(
         () => {
           this._fireMajorGlitch();
@@ -593,6 +556,8 @@ class UiDigitalGarden extends BaseClass {
         },
         letters.length * 100 + 2000,
       );
+    }
+    promise.then(() => (this.typestate = reverse ? "typed-in" : "typed-out"));
     return promise;
   };
 
