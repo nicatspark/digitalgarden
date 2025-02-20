@@ -103,13 +103,15 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  /* backdrop-filter: blur(3px); */
+  backdrop-filter: brightness(0.5) blur(3px);
   color: white;
+  z-index: 1;
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-out;
+}
 
-  ui-digital-garden {
-    width: 300px;
-    view-transition-name: logo;
-  }
+#app {
+  scroll-snap-type: y mandatory;
 }
 
 .silkscreen-regular {
@@ -127,4 +129,37 @@ header {
 section {
   min-height: 100vh;
   position: static;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: black;
+  font-size: 1.5rem;
+  line-height: 1.6em;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+
+  h2 {
+    padding-inline-end: 5%;
+  }
+
+  p,
+  li {
+    color: white;
+    text-align: left;
+    max-width: 600px;
+    text-wrap: balance;
+
+    em {
+      white-space: nowrap;
+    }
+  }
+}
+
+footer {
+  background-color: #212121;
+  color: white;
+  padding: 2rem;
+  height: 200px;
 }

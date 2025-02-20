@@ -1,9 +1,44 @@
 .landing {
+  background-color: #e5e5f7;
+  background-size: 10px 10px;
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--bg-color),
+    var(--bg-color) 5px,
+    hsl(from var(--bg-color) h s calc(l + 2)) 5px,
+    hsl(from var(--bg-color) h s calc(l + 2))
+  );
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
+}
+
+.headerLogo {
+  position: fixed;
+  opacity: 0.5;
+  isolation: isolate;
+  top: -10px;
+  left: 32px;
+  width: 300px;
+  z-index: 2;
+}
+
+.about {
+  background-color: hsl(354deg 80% 10%);
+}
+
+.farmer {
+  position: fixed;
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+}
+
+.spacer {
+  height: 100vh;
 }
 
 .container {
@@ -19,22 +54,4 @@
   color: hsl(60deg 60% 60%);
   text-shadow: 0 0 20px hsl(60deg 50% 60% / 50%);
   filter: blur(0.7px);
-}
-
-.about {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  background-color: black;
-
-  p {
-    color: white;
-    font-size: 1.5rem;
-    text-align: left;
-    max-width: 600px;
-    text-wrap: balance;
-    line-height: 1.6em;
-  }
 }
