@@ -1,0 +1,113 @@
+.contactCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-areas:
+    ". image   ."
+    ". image   ."
+    ". .       ."
+    ". title   ."
+    ". .       ."
+    ". details ."
+    ". .       ."
+    ". action  ."
+    ". action  .";
+  grid-template-columns:
+    [container-start] 1lh minmax(0, 1fr)
+    1lh [container-end];
+  grid-template-rows: auto [container-start] auto 1lh auto 0.5lh auto 1lh auto [container-end] auto;
+  text-align: left;
+}
+
+@container (inline-size >= 48em) {
+  .card {
+    grid-template-areas:
+      ". image . .       ."
+      ". image . .       ."
+      ". image . title   ."
+      ". image . .       ."
+      ". image . details ."
+      ". image . .       ."
+      ". image . action  ."
+      ". image . action  .";
+    grid-template-columns:
+      [container-start] 1lh auto 1lh minmax(0, 1fr)
+      1lh [container-end];
+    grid-template-rows: 1lh [container-start] 1lh auto 1lh auto 1lh auto [container-end] 1lh;
+  }
+}
+
+.card::before {
+  background-color: hsl(271 48% 32%);
+  border-radius: 5px;
+  content: "";
+  grid-area: container;
+  place-self: stretch;
+  box-shadow: inset 0 0 2px hsl(271deg 32% 50%);
+}
+
+.card__title {
+  grid-area: title;
+  /* title size, color, etc. */
+  grid-area: title;
+  font-size: 1.2em;
+  line-height: 1;
+  text-shadow: -0.125em 0.125em hsl(264 84% 20%);
+  /* transform: skew(0, -3.5deg); */
+  font-family: monospace;
+}
+
+.card__image {
+  aspect-ratio: 1;
+  block-size: auto;
+  border: 0.125rem solid hsl(264 84% 20%);
+  border-radius: 50%;
+  grid-area: image;
+  place-self: center;
+  object-fit: cover;
+  width: 200px;
+}
+
+@container (inline-size < 48em) {
+  .card__image {
+    max-inline-size: min(66%, 40svh);
+  }
+}
+
+.card__details {
+  grid-area: details;
+  /* styles for detail content */
+  font-family: "Silkscreen", serif;
+  font-size: 1rem;
+}
+
+.card__action {
+  appearance: none;
+  background: hsl(322 85% 46%);
+  border: 0.125rem solid hsl(264 84% 20%);
+  border-radius: 0.375em;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1;
+  grid-area: action;
+  padding: 0.5em 1em;
+  place-self: center;
+  transform: skew(0, -3.5deg);
+  transition: filter 0.2s ease-out;
+}
+
+.card__action:hover {
+  filter: brightness(1.1);
+}
+
+.card__action:active {
+  filter: brightness(0.9);
+}

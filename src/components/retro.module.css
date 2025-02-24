@@ -1,0 +1,46 @@
+.retro {
+  background-color: hsl(48.31deg 27.66% 29.12%);
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+
+  h2 {
+    --v-pad: 100px;
+    --slice-size: 25px;
+    font-size: 7.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    padding: var(--v-pad) 20px;
+    background: linear-gradient(
+      #ff0 calc(0.16em + var(--v-pad) + var(--slice-size)),
+      #f00 0,
+      #f00 calc(100% - 0.12em - var(--v-pad) - var(--slice-size)),
+      #f0f 0
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+    filter: url(#split);
+
+    &::before {
+      content: "";
+      background: black;
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: lighten;
+      pointer-events: none;
+    }
+  }
+
+  div {
+    max-width: 600px;
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+  }
+}

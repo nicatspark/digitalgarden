@@ -1,24 +1,63 @@
 import { createFileRoute } from "@tanstack/react-router";
 import styles from "./index.module.css";
-import { useEffect, useRef, useState } from "react";
 import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  strDelay,
   typewriterEffect,
   typewriterEffectAbort,
 } from "../helpers/displayString";
 import { BigHeadlines } from "../components/BigHeadlines";
+import { ContactCard } from "../components/ContactCard";
+import { GoodCompany } from "../components/GoodCompany";
+import { Retro } from "../components/Retro";
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ui-digital-garden": HTMLElement;
+    "ui-scroll-reveal": HTMLElement;
+    "ui-circular-text": HTMLElement;
+    "ui-digital-farmer": HTMLElement;
+  }
+}
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    "ui-digital-garden": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
+    "ui-scroll-reveal": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
+    "ui-circular-text": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
+    "ui-digital-farmer": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
+  }
+}
 
 export const Route = createFileRoute("/")({
   component: App,
 });
 
-const strings = [
-  "Consultant Web Developer",
-  "Freelance Frontend Engineer",
-  "Freelance Frontend Developer",
-  "Freelance Frontend Architect",
-  "Could be _your_ frontend aficionado",
+const strings: strDelay[] = [
+  ["Consultant Web Developer", 4000],
+  ["Freelance Frontend Engineer", 800],
+  ["Freelance Frontend Developer", 800],
+  ["Freelance Frontend Architect", 800],
+  ["Could be _your_ frontend aficionado", 5000],
 ];
-const delays = [4000, 800, 800, 800, 5000];
 const element = document.getElementById("typewriter") as HTMLDivElement;
 
 const abortController = new AbortController();
@@ -73,7 +112,7 @@ function App() {
 
   useEffect(() => {
     if (showTagline && tagline.current) {
-      typewriterEffect({ strings, delays, element: tagline.current });
+      typewriterEffect({ strings, element: tagline.current });
     } else if (tagline.current) {
       tagline.current.textContent = "";
       typewriterEffectAbort();
@@ -112,20 +151,7 @@ function App() {
           </p>
         </div>
       </section>
-      <section>
-        <h2>You're in good company</h2>
-        <p>
-          <ui-scroll-reveal finish="20">
-            I've been working with clients like <em>Scania</em>,{" "}
-            <em>Stena Line</em>, <em>Stena Renewable</em>, <em>Medivir</em>,{" "}
-            <em>Svt</em>, <em>Göteborgs-Posten</em>, <em>Volvo</em>,{" "}
-            <em>Akzo-Nobel</em>, <em>Telia</em> and many smaller businesses and
-            lovely startups. Currently I am working with <em>SKF</em> in their
-            design-system-team that supports their brigade of application
-            developers globally.
-          </ui-scroll-reveal>
-        </p>
-      </section>
+      <GoodCompany />
       <BigHeadlines />
       <section className={styles.about}>
         <h2>About</h2>
@@ -140,20 +166,22 @@ function App() {
             <br />
             <br />
             As I am sure you caught by now, I'm a web developer with a passion
-            for frontend development. I am a freelancing consultant and Digital
-            Garden is my company. I've been in the industry for twenty-five plus
-            years and had the privilege of working with a variety of interesting
-            clients, from small startups to large corporations. I specialize in
-            building web applications using modern frontend frameworks. I also
-            have experience with backend technologies like Node.js, Express, and
-            MongoDB/SQL. I'm always looking for new challenges and opportunities
-            to learn and grow as a developer, believe it or not. If you're
-            looking for a frontend developer to help you build your next
-            project, I'd love to hear from you! Contact me at{" "}
+            for frontend development. I am a freelancing consultant with 25+
+            years of experience and Digital Garden is my company. I've been
+            privileged to work with a range of interesting clients, from small
+            startups to large corporations. I specialize in building web
+            applications using modern frontend frameworks. I also have
+            experience with backend technologies like Node.js, Express, and
+            MongoDB/SQL. Before the CMS market was saturated, I sold and
+            maintained a CMS solution. I'm always looking for new challenges and
+            opportunities to learn and grow as a developer. If you're looking
+            for a frontend developer to help you build your next project, I'd
+            love to hear from you! Contact me at{" "}
             <a href="mailto:nicolas@hervy.se">nicolas@hervy.se</a>
           </ui-scroll-reveal>
         </p>
       </section>
+      <Retro />
       <section>
         <h2>Skills & Expertise</h2>
         <ul>
@@ -161,14 +189,14 @@ function App() {
           <li>Native Web Component libraries</li>
           <li>Responsive Design</li>
           <li>Web Development</li>
-          <li>Mobile Development/</li>
+          <li>Mobile Development/PWA</li>
           <li>UI/UX Design/prototyping</li>
           <li>SEO Optimization</li>
           <li>Accessibility Best Practices</li>
           <li>Performance Optimization/architecture</li>
         </ul>
       </section>
-      <section>
+      <section style={{ boxShadow: "0 20px 20px hsl(0 0 0 / 0.3)" }}>
         <h2>Let's meet</h2>
         <div
           className="tidycal-embed"
@@ -192,13 +220,14 @@ function App() {
         </ui-cirkular-text>
       </section>
       <div className={styles.spacer}></div>
-      <footer>
+      <ContactCard />
+      {/* <footer>
         <ui-text-reveal>
           <p>
             <a href="mailto:nicolas@hervy.se">Contact me</a>
           </p>
         </ui-text-reveal>
-      </footer>
+      </footer> */}
     </>
   );
 }
