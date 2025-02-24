@@ -1,9 +1,10 @@
 let started = false;
 let abort = false;
 
+export type strDelay = [string, number];
+
 interface TypewriterEffectProps {
-  strings: string[];
-  delays: number[];
+  strings: strDelay[];
   element: HTMLDivElement;
 }
 
@@ -13,18 +14,14 @@ export function typewriterEffectAbort() {
   abort = true;
 }
 
-export function typewriterEffect({
-  strings,
-  delays,
-  element,
-}: TypewriterEffectProps) {
+export function typewriterEffect({ strings, element }: TypewriterEffectProps) {
   if (started && strings) return;
   started = true;
   abort = false;
   let currentIndex = 0;
   let currentString = "";
-  let nextString = strings[currentIndex];
-  let nextNextString = strings[(currentIndex + 1) % strings.length];
+  let nextString = strings[currentIndex][0];
+  let nextNextString = strings[(currentIndex + 1) % strings.length][0];
   let isDeleting = false;
   let sentenceDone = false;
   let charIndex = 0;
@@ -47,8 +44,8 @@ export function typewriterEffect({
         // move to the next string
         isDeleting = false;
         currentIndex = (currentIndex + 1) % strings.length;
-        nextString = strings[currentIndex];
-        nextNextString = strings[(currentIndex + 1) % strings.length]; // update nextNextString
+        nextString = strings[currentIndex][0];
+        nextNextString = strings[(currentIndex + 1) % strings.length][0]; // update nextNextString
       }
     } else {
       // add a character
@@ -72,7 +69,7 @@ export function typewriterEffect({
     const expo = easeOutQuad(charIndex / nextString.length);
     const delay = isDeleting
       ? sentenceDone
-        ? delays[currentIndex]
+        ? strings[currentIndex][1]
         : expo * 50
       : expo * 100;
     sentenceDone = false;
